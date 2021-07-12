@@ -24,8 +24,21 @@ author:
     name: Tomofumi Okubo
     organization: DigiCert, Inc.
     email: tomofumi.okubo+ietf@gmail.com
+ -
+    ins: S. Turner
+    name: Sean Turner
+    organization: sn3rd
+    email: sean@sn3rd.com
 
-
+normative:
+  X.680:
+      title: "Information technology - Abstract Syntax Notation One (ASN.1): Specification of basic notation"
+      date: November 2015
+      author:
+        org: ITU-T
+      seriesinfo:
+        ISO/IEC: 8824-1:2015
+        
 --- abstract
 
 {{!RFC5280}} specifies several extended key usages for X.509 certificates. This document defines a general purpose document signing extended key usage for X.509 public key certificates which restricts the usage of the certificates for document signing. 
@@ -70,7 +83,7 @@ use of any Subject names in the certificate is restricted to use by a document s
 
 Term of "Document Sign" in this paper is digitaly signing human readable data or data that is intended to be human readable by means of services and software.
 
-## Extended Key Usage Values for Document Signing
+## Extended Key Usage Values for Document Signing {#ext}
 {{RFC5280}} specifies the EKU X.509 certificate extension for use in the Internet.  The extension indicates one or more purposes for which the certified public key is valid.  The EKU extension can be used in conjunction with the key usage extension, which indicates how the public key in the certificate is used, in a more basic cryptographic way.
 
 The EKU extension syntax is repeated here for convenience:
@@ -101,31 +114,41 @@ The Use of id-kp-documentSigning EKU can prevents the usage of id-kp-emailProtec
 
 # IANA Considerations
 
-The id-kp-documentSigning purpose requires an object identifier (OID).  The objects are defined in an arc delegated by IANA to Limited Additional Mechanisms for PKIX and SMIME (lamps).  No further action is necessary by IANA.
+This document requests that IANA make two assignments. One for the id-kp-documentSigning object identifier (OID), as defined in {{ext}}, for the EKU from the "SMI Security for PKIX Extended Key Purpose" (1.3.6.1.5.5.7.3) registry.  Another for the id-mod-docsign-eku, as defined in {{module}}, for the ASN.1 module from the in the "SMI Security for PKIX Module Identifier" (1.3.6.1.5.5.7.0) registry.  No further action is necessary by IANA.
 
 --- back
 
-<!--
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
--->
+We would like to thank Russ Housley for verifying the ASN.1 module.
 
-<!--
-# Apendix
+# Appendix A. ASN.1 Module {{#module}}
+
+The following ASN.1 module {{X.680}} provides the complete definition of the
+Document Signing EKU.
 
 ~~~
-id-ce-extKeyUsage OBJECT IDENTIFIER ::=  {joint-iso-itu-t(2) ds(5) certificateExtension(29) extKeyUsage(37)}
-ExtKeyUsageSyntax ::= SEQUENCE SIZE (1..MAX) OF KeyPurposeId
-KeyPurposeId ::= OBJECT IDENTIFIER
+DocSignEKU { iso(1) identified-organization(3) dod(6) internet(1)
+   security(5) mechanisms(5) pkix(7) id-mod(0) id-mod-docsign-eku(TBD1) }
 
-DEFINITIONS IMPLICIT TAGS ::=
-BEGIN
-    OID Arcs
-        id-kp  OBJECT IDENTIFIER ::= { iso(1) identified-organization(3) dod(6) internet(1) security(5) mechanisms(5) pkix(7) 3 }
-    Extended Key Usage Values
-        id-kp-docSigning  OBJECT IDENTIFIER  ::=  { id-kp XX }
-END
+   DEFINITIONS EXPLICIT TAGS ::=
+
+   BEGIN
+
+   -- EXPORTS ALL --
+
+   -- IMPORTS NOTHING --
+
+   -- OID Arc --
+
+   id-kp  OBJECT IDENTIFIER  ::= {
+     iso(1) identified-organization(3) dod(6) internet(1)
+     security(5) mechanisms(5) pkix(7) kp(3) }
+
+   -- Document Signing Extended Key Usage --
+
+   id-kp-documentSigning OBJECT IDENTIFIER ::= { id-kp TBD2 }
+
+   END
 ~~~
--->
